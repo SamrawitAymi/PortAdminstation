@@ -27,6 +27,8 @@ namespace PortAdminstation
             List<Boat> boatsOnWay = new List<Boat>();
             List<Boat> boatOutParkedPlace = new List<Boat>();
 
+            Console.WriteLine("Press any key to Port parking");
+
             DailyComingBoats(createBoats, random, boatsComeEveryDay);
             //Create parking plats
             Console.WriteLine("Parking No." + "\t\t\t" + "Boat" + "\t\t\t" + "typ");
@@ -47,11 +49,8 @@ namespace PortAdminstation
 
             Console.WriteLine($"Number of Motor Boat: {numberOfMotorboat}\n\n \nNumber of Sail Boat: {numberOfSailBoat}\n Number of Cargo Ship: {NumberOfCargoBoat}");
 
-           
-           
-
-            // show no parking place for boats plats
-            Console.WriteLine("Boats that do not receive any place:");
+                       // show parking place not fit for boats plats
+            Console.WriteLine("Boats that do not fit any place:");
             GetBoatOutParkedPlace(boatOutParkedPlace);
 
             createBoats.Clear();
@@ -65,6 +64,8 @@ namespace PortAdminstation
                 Console.Clear();
            
         }
+
+        #region DailyComingBoats
         private static void DailyComingBoats(List<Boat> createBoats, Random random, int boatsComeEveryDay)
         {
             for (int i = 0; i < boatsComeEveryDay; i++)
@@ -93,7 +94,9 @@ namespace PortAdminstation
                  
             }
         }
+        #endregion
 
+        #region CreateParkingPlace
         private static double CreateBookingPlace(double TotalParkingPlace, double BookedPortPlaces, Port port, List<Boat> createBoats, List<Boat> boatsOnWay, List<Boat> boatOutParkedPlace)
         {
             
@@ -124,6 +127,9 @@ namespace PortAdminstation
 
             return BookedPortPlaces;
         }
+        #endregion
+
+        #region GetParkingPlace
         private static void GetParkingPlace(Port port, List<Boat> boatOnWay, out double placeNumber, out int numberOfMotorboat, out int numberOfSailBoat, out int NumberOfCargoBoat)
         {
             foreach (var items in port.BoatPlaces)
@@ -139,7 +145,7 @@ namespace PortAdminstation
             numberOfSailBoat = 0;
             NumberOfCargoBoat = 0;
           
-            Console.WriteLine("PlaceNo\t\t\tBoatType\t\t\tBoatNummer");
+           // Console.WriteLine("PlaceNo\t\t\tBoatType\t\t\tBoatNummer");
 
             foreach (Boat item in boatOnWay.ToArray())
             {
@@ -180,6 +186,10 @@ namespace PortAdminstation
                 }
             }
         }
+
+        #endregion
+
+        #region GetFreeParkingPlats
         private static double GetFreeParkingPlats(double placeNumber)
         {
             if (placeNumber < 25)
@@ -196,7 +206,9 @@ namespace PortAdminstation
             }
             return placeNumber;
         }
+        #endregion
 
+        #region GetNumberOfDaysInPort
         private static void GetNumberOfDaysInPort(ref double BookedPortPlaces, List<Boat> boatsOnWay, ref int numberOfMotorboats, ref int numberOfSailBoats, ref int numberOfCargoBoat)
         {
             foreach (var item in boatsOnWay.ToArray())
@@ -225,7 +237,9 @@ namespace PortAdminstation
                 }
             }
         }
+        #endregion
 
+        #region GetTheBoatOutParkedPlace
         private static void GetBoatOutParkedPlace(List<Boat> boatOutParkedPlace)
         {
             foreach (var item in boatOutParkedPlace)
@@ -234,38 +248,7 @@ namespace PortAdminstation
                 
             }
         }
-        public static List<Boat> CreateBoatsTreeBoatTypes()
-        {
-            Random random = new Random();
-            List<Boat> boats = new List<Boat>();
-            for (int i = 0; i < 4; i++)
-            {
-                int row = random.Next(1, 3);
-                if(row == 1)
-                {
-                    MotorBoat motorBoat = new MotorBoat();
-                    boats.Add(motorBoat);
-
-                }
-                if (row == 2)
-                {
-                    SailBoat sailBoat = new SailBoat();
-                    boats.Add(sailBoat);
-
-                }
-                if (row == 3)
-                {
-                    CargoShip cargoShip = new CargoShip();
-                    boats.Add(cargoShip);
-                }
-                else
-                {
-                    throw new ArgumentException("Enter the segel number 1-3");
-                }
-                return null; 
-            }
-            return boats;
-        }
+        #endregion
 
 
     }
