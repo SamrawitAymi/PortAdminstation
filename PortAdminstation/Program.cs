@@ -17,7 +17,7 @@ namespace PortAdminstation
             Port port = new Port();
             port.BoatPlaces = new List<ParkingLot>();
 
-            int boatsComeEveryDay = 5;
+            int boatsComeEveryDay = 4;
             Random random = new Random();
             //Console.WriteLine("Press any key to switch to the next day");
             Console.ReadLine();
@@ -27,50 +27,51 @@ namespace PortAdminstation
             List<Boat> boatsOnWay = new List<Boat>();
             List<Boat> boatOutParkedPlace = new List<Boat>();
 
-            Console.WriteLine("Press any key to Port parking");
+            Console.WriteLine("Press any key to show Port parking");
+            do
+            {
+                DailyComingBoats(createBoats, random, boatsComeEveryDay);
+                //Create parking plats
+                Console.WriteLine("Parking No." + "\t\t\t" + "Boat" + "\t\t\t" + "typ");
+                CreateBookingPlace(TotalParkingPlace, BookedPortPlaces, port, createBoats, boatsOnWay, boatOutParkedPlace);
 
-            DailyComingBoats(createBoats, random, boatsComeEveryDay);
-            //Create parking plats
-            Console.WriteLine("Parking No." + "\t\t\t" + "Boat" + "\t\t\t" + "typ");
-            CreateBookingPlace(TotalParkingPlace, BookedPortPlaces, port, createBoats, boatsOnWay, boatOutParkedPlace);
-         
-            int NumberOfCargoBoat, numberOfSailBoat, numberOfMotorboat;
-            double placeNumber;
-            //Show number of boats that is created 
-            GetParkingPlace(port, boatsOnWay, out placeNumber, out numberOfMotorboat, out numberOfSailBoat, out NumberOfCargoBoat);
-            //Show free parking place
-            GetFreeParkingPlats(placeNumber);
+                int NumberOfCargoBoat, numberOfSailBoat, numberOfMotorboat;
+                double placeNumber;
+                //Show number of boats that is created 
+                GetParkingPlace(port, boatsOnWay, out placeNumber, out numberOfMotorboat, out numberOfSailBoat, out NumberOfCargoBoat);
+                //Show free parking place
+                GetFreeParkingPlats(placeNumber);
 
-            //Get number of days that Boats parked in the port
-            GetNumberOfDaysInPort(ref BookedPortPlaces, boatsOnWay, ref numberOfMotorboat, ref numberOfSailBoat, ref NumberOfCargoBoat);
+                //Get number of days that Boats parked in the port
+                GetNumberOfDaysInPort(ref BookedPortPlaces, boatsOnWay, ref numberOfMotorboat, ref numberOfSailBoat, ref NumberOfCargoBoat);
 
 
-            Console.WriteLine();
+                Console.WriteLine();
 
-            Console.WriteLine($"Number of Motor Boat: {numberOfMotorboat}\n\n \nNumber of Sail Boat: {numberOfSailBoat}\n Number of Cargo Ship: {NumberOfCargoBoat}");
+                Console.WriteLine($"Number of Motor Boat: {numberOfMotorboat}\nNumber of Sail Boat: {numberOfSailBoat}\n Number of Cargo Ship: {NumberOfCargoBoat}");
 
-                       // show parking place not fit for boats plats
-            Console.WriteLine("Boats that do not fit any place:");
-            GetBoatOutParkedPlace(boatOutParkedPlace);
+                // show parking place not fit for boats plats
+                Console.WriteLine("Boats that do not fit any place:");
+                GetBoatOutParkedPlace(boatOutParkedPlace);
 
-            createBoats.Clear();
-            boatOutParkedPlace.Clear();
+                createBoats.Clear();
+                boatOutParkedPlace.Clear();
 
-            day++;
+                day++;
 
-            Console.WriteLine();
-            Console.WriteLine("Press any key to swithch to the next day");
-            if (Console.ReadKey().Key == ConsoleKey.Enter)
-                Console.Clear();
-           
-        }
+                Console.WriteLine();
+                Console.WriteLine("Press any key to switch to the next day");
+                if (Console.ReadKey().Key == ConsoleKey.Enter)
+                    Console.Clear();
+            } while (true);
+            }
 
         #region DailyComingBoats
         private static void DailyComingBoats(List<Boat> createBoats, Random random, int boatsComeEveryDay)
         {
             for (int i = 0; i < boatsComeEveryDay; i++)
             {
-                int randomNum = random.Next(1, 4);
+                int randomNum = random.Next(1, 3);
               
                 if (randomNum == 1)
                 {
@@ -244,7 +245,7 @@ namespace PortAdminstation
         {
             foreach (var item in boatOutParkedPlace)
             {
-                Console.WriteLine($"{item.BoatType} med ID number: {item.BoatId}");
+                Console.WriteLine($"{item.BoatType} ID number: {item.BoatId}");
                 
             }
         }

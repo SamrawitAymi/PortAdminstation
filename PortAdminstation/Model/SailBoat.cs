@@ -10,10 +10,10 @@ namespace PortAdminstation
         string IdPrefix = "L-";
         public SailBoat()
         {
-            BoatType = "Cargo Ship";
+            BoatType = "Sailboat";
             BoatId = IdPrefix + GetGeneratedID();
-            PlaceTakes = 4.0;
-            NumOfDaysParkedInPort = 6;
+            PlaceTakes = 2.0;
+            NumOfDaysParkedInPort = 1;
 
         }
     }
