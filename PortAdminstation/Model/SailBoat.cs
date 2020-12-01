@@ -7,7 +7,7 @@ namespace PortAdminstation
 
     public class SailBoat: Boat
     {
-        string IdPrefix = "L-";
+        string IdPrefix = "S-";
         public SailBoat()
         {
             BoatType = "Sailboat";

@@ -17,7 +17,7 @@ namespace PortAdminstation
             Port port = new Port();
             port.BoatPlaces = new List<ParkingLot>();
 
-            int boatsComeEveryDay = 4;
+            int boatsComeEveryDay = 5;
             Random random = new Random();
             //Console.WriteLine("Press any key to switch to the next day");
             Console.ReadLine();
@@ -27,12 +27,18 @@ namespace PortAdminstation
             List<Boat> boatsOnWay = new List<Boat>();
             List<Boat> boatOutParkedPlace = new List<Boat>();
 
-            Console.WriteLine("Press any key to show Port parking");
+           
             do
             {
+                Console.WriteLine($"Day: {day}");
+                Console.WriteLine();
+                Console.WriteLine("Arriving boats to be park");
                 DailyComingBoats(createBoats, random, boatsComeEveryDay);
                 //Create parking plats
-                Console.WriteLine("Parking No." + "\t\t\t" + "Boat" + "\t\t\t" + "typ");
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("Parking No." + "\t\t\t" + "Boat" + "\t\t\t" + "type");
                 CreateBookingPlace(TotalParkingPlace, BookedPortPlaces, port, createBoats, boatsOnWay, boatOutParkedPlace);
 
                 int NumberOfCargoBoat, numberOfSailBoat, numberOfMotorboat;
@@ -52,7 +58,7 @@ namespace PortAdminstation
 
                 // show parking place not fit for boats plats
                 Console.WriteLine("Boats that do not fit any place:");
-                GetBoatOutParkedPlace(boatOutParkedPlace);
+                GetBoatNotFitParkedPlace(boatOutParkedPlace);
 
                 createBoats.Clear();
                 boatOutParkedPlace.Clear();
@@ -64,23 +70,19 @@ namespace PortAdminstation
                 if (Console.ReadKey().Key == ConsoleKey.Enter)
                     Console.Clear();
             } while (true);
-            }
+        }
 
         #region DailyComingBoats
         private static void DailyComingBoats(List<Boat> createBoats, Random random, int boatsComeEveryDay)
         {
             for (int i = 0; i < boatsComeEveryDay; i++)
             {
-                int randomNum = random.Next(1, 3);
+                int randomNum = random.Next(1, 4);
               
                 if (randomNum == 1)
                 {
                     MotorBoat motorBoat = new MotorBoat();
                     createBoats.Add(motorBoat);
-                    if(motorBoat.PlaceTakes == 1)
-                    {
-                        createBoats.Add(motorBoat);
-                    }
                 }
                 else if (randomNum == 2)
                 {
@@ -111,7 +113,7 @@ namespace PortAdminstation
                 {
                     BookedPortPlaces += item.PlaceTakes;
 
-                    int parkingLot = 1;
+                    int parkingLot = 0;
 
                     item.CurrentPlaceId = parkingLot;
 
@@ -126,7 +128,7 @@ namespace PortAdminstation
                 }
             }
 
-            return BookedPortPlaces;
+            return 0;
         }
         #endregion
 
@@ -137,114 +139,122 @@ namespace PortAdminstation
             {
                 foreach (var item in boatOnWay)
                 {
-                    if (item.PlaceTakes == item.PlaceTakes);
+                    if (item.PlaceTakes == items.ParkingLotSize);
                 }
             }
 
-            placeNumber = 1;
+            placeNumber = 1 ;
             numberOfMotorboat = 0;
             numberOfSailBoat = 0;
             NumberOfCargoBoat = 0;
-          
-           // Console.WriteLine("PlaceNo\t\t\tBoatType\t\t\tBoatNummer");
-
+            
             foreach (Boat item in boatOnWay.ToArray())
             {
-
-                if (item != null)
+            if (item != null)
+            {
+                if (item.PlaceTakes > 1)
+                       
                 {
-                    if (item.PlaceTakes > 1)
-                    {
-                        Console.WriteLine($"{placeNumber}-{placeNumber + item.PlaceTakes - 1}\t\t\t {item.BoatType}\t\t\t { item.BoatId}");
-
-                        placeNumber++;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{placeNumber}-{placeNumber + item.PlaceTakes - 1}.\t\t\t{item.BoatType}\t\t\tt{item.BoatId}");
-                    }
-                    
-                    if (item is MotorBoat)
-                    {
-                        numberOfMotorboat++;
-                        placeNumber += item.PlaceTakes;
-                    }
-                    else if (item is SailBoat)
-                    {
-                        numberOfSailBoat++;
-                        placeNumber += item.PlaceTakes - 1;
-                    }
-                    else if (item is CargoShip)
-                    {
-                        NumberOfCargoBoat++;
-                        placeNumber += item.PlaceTakes - 1;
-                    }
-                }
+                    Console.WriteLine($"{placeNumber}-{placeNumber + item.PlaceTakes - 1}\t\t\t {item.BoatType}\t\t\t { item.BoatId}");
+                    placeNumber++;
+                }                             
                 else
                 {
-                    Console.WriteLine(placeNumber + "Free Place");
-                    placeNumber++;
+                    Console.WriteLine($"{placeNumber}\t\t\t{item.BoatType}\t\t\t{item.BoatId}");
                 }
+                
+                if (item is MotorBoat)
+                {
+                    numberOfMotorboat++;
+                    placeNumber += item.PlaceTakes;
+                }
+                else if (item is SailBoat)
+                {
+                    numberOfSailBoat++;
+                    placeNumber += item.PlaceTakes - 1;
+                }
+                else if (item is CargoShip)
+                {
+                    NumberOfCargoBoat++;
+                    placeNumber += item.PlaceTakes - 1;
+                }                     
+               
             }
+            else
+            {
+                Console.WriteLine(placeNumber + "Free Place");
+                placeNumber++;
+                    if (placeNumber > 25)
+                    {
+                        var boatNotFitParkplace = new List<Boat>();
+                        boatNotFitParkplace.Add(item);
+                    }
+            }               
         }
+    }
 
         #endregion
 
         #region GetFreeParkingPlats
         private static double GetFreeParkingPlats(double placeNumber)
-        {
+        {   
             if (placeNumber < 25)
             {
                 double FreePlaces = 25 - placeNumber;
 
                 for (int i = 0; i < FreePlaces; i++)
                 {
-                    Console.WriteLine($"{placeNumber} \t\t\t Free Plats");
+                    Console.WriteLine($"{placeNumber} \t\t\t Free");
 
+                    
                     placeNumber++;
                 }
-
             }
-            return placeNumber;
+            return 0;
         }
         #endregion
 
         #region GetNumberOfDaysInPort
         private static void GetNumberOfDaysInPort(ref double BookedPortPlaces, List<Boat> boatsOnWay, ref int numberOfMotorboats, ref int numberOfSailBoats, ref int numberOfCargoBoat)
         {
-            foreach (var item in boatsOnWay.ToArray())
-            {
-                if (item != null)
+                foreach (var item in boatsOnWay.ToArray())
                 {
-                    if (item.NumOfDaysParkedInPort != 0)
-                    {
-                       
-                        item.NumOfDaysParkedInPort--;
-                    }
+              
 
-                    else
+                    if (item != null)
                     {
-                        Console.WriteLine($"The boat leaving the harbor: {item.BoatId}");
- 
-                        if (item is MotorBoat)
-                            numberOfMotorboats--;
-                        else if (item is SailBoat)
-                            numberOfSailBoats--;
-                        else if (item is CargoShip)
-                            numberOfCargoBoat--;
-                        BookedPortPlaces -= item.PlaceTakes;
-                        boatsOnWay.Remove(item);
+
+                        if (item.NumOfDaysParkedInPort != 0)
+                        {
+                            item.NumOfDaysParkedInPort -= item.NumOfDaysParkedInPort;
+                        }
+
+                        else
+                        {
+                            Console.WriteLine($"The boat leaving the harbor: {item.BoatId}");
+
+                            if (item is MotorBoat)
+                                numberOfMotorboats--;
+                            else if (item is SailBoat)
+                                numberOfSailBoats--;
+                            else if (item is CargoShip)
+                                numberOfCargoBoat--;
+
+                            BookedPortPlaces -= item.PlaceTakes;
+                            boatsOnWay.Remove(item);
+                        }
                     }
                 }
-            }
+           
         }
         #endregion
 
         #region GetTheBoatOutParkedPlace
-        private static void GetBoatOutParkedPlace(List<Boat> boatOutParkedPlace)
+        private static void GetBoatNotFitParkedPlace(List<Boat> boatOutParkedPlace)
         {
             foreach (var item in boatOutParkedPlace)
             {
+
                 Console.WriteLine($"{item.BoatType} ID number: {item.BoatId}");
                 
             }
